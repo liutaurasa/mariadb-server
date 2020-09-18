@@ -1,0 +1,50 @@
+---
+- name: "MariaDB | Root password |"
+  mysql_user:
+    name: root
+    host: localhost
+    password: '{{ mariadb_root_password }}'
+  ignore_errors: "{{ ansible_check_mode }}"
+  register: root_password_set
+
+- name: "MariaDB | Create .my.cnf |"
+  template:
+    src: templates/root_my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: "u=rw,g=r"
+
+- name: "MariaDB | Update SQL root password for all root accounts |"
+  mysql_user:
+    name: root
+    host: '{{ item }}'
+    password: '{{ mariadb_root_password }}'
+  ignore_errors: "{{ ansible_check_mode }}"
+  loop:
+    - '{{ ansible_nodename }}'
+    - localhost.localdomain
+    - localhost
+    - 127.0.0.1
+    - ::1
+
+- name: "MariaDB | Remove SQL anonymous users |"
+  mysql_user:
+    name: ''
+    host: '{{ item }}'
+    state: absent
+  ignore_errors: "{{ ansible_check_mode }}"
+  loop:
+    - '{{ ansible_nodename }}'
+    - localhost.localdomain
+    - localhost
+    - 127.0.0.1
+    - ::1
+
+- name: "MariaDB | Remove SQL test database |"
+  mysql_db:
+    name: test
+    state: absent
+  ignore_errors: "{{ ansible_check_mode }}"
+
+#TODO remove test entries from db table in mysql database

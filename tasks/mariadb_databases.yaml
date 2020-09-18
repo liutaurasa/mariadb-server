@@ -1,0 +1,20 @@
+---
+- name: "MariaDB | Create SQL database {{ _database }} |"
+  mysql_db:
+    login_host: "{{ _database.server | default('localhost') }}"
+    login_user: "{{ _database.login_user | default('root')}}"
+    login_password: "{{ _database.login_password | default(mariadb_root_password) }}"
+    name: "{{ _database.name }}"
+    state: present
+
+- name: "MariaDB | Create SQL user for {{ _database }} |"
+  mysql_user:
+    login_host: "{{ _database.server | default('localhost') }}"
+    login_user: "{{ _database.login_user | default('root') }}"
+    login_password: "{{ _database.login_password | default(mariadb_root_password) }}"
+    host: "{{ _database.host | default('localhost') }}"
+    name: "{{ _database.user }}"
+    password: "{{ _database.password }}"
+    priv: "{{ _database.name }}.*:ALL"
+    state: present
+    update_password: always

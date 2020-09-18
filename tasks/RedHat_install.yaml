@@ -1,0 +1,7 @@
+---
+- name: "MariaDB | RedHat Install packages |"
+  yum:
+    name: "{{ mariadb[ansible_os_family]['packages'] }}"
+    state: "{{ packages_state | default('present') }}"
+    enablerepo: "{{ yum_enable_repos | default(omit) }}"
+

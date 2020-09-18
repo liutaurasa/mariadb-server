@@ -1,0 +1,34 @@
+---
+- name: "MariaDB | Configuration file |"
+  copy:
+    src: files/my.cnf
+    dest: /etc/my.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: "Restart mariadb"
+
+- name: "MariaDB | Get SQL temp directory |"
+  shell: 'grep -E ^tmpdir /etc/my.cnf | cut -d= -f2'
+  register: _sql_tmpdir
+  changed_when: False
+  check_mode: no
+
+- name: "MariaDB | Create SQL temp directory |"
+  file:
+    path: '{{ _sql_tmpdir.stdout }}'
+    owner: mysql
+    group: mysql
+    state: directory
+  when: 
+    - sql_tmpdir is defined
+    - sql_tmpdir.stdout | length > 0
+
+# Need MariaDB server started to continue
+- meta: flush_handlers
+
+- name: "MariaDB | Enable and start service |"
+  service:
+    name: "{{ mariadb[ansible_os_family]['service'] }}"
+    state: started
+    enabled: yes

@@ -1,0 +1,18 @@
+---
+- name: "MariaDB | Install |"
+  include_tasks:
+    file: "{{ ansible_os_family }}_install.yaml"
+    
+- name: "MariaDB | Setup |"
+  include_tasks: "mariadb_setup.yaml"
+
+- name: "MariaDB | Initial |"
+  include_tasks: "mariadb_initial.yaml"
+
+- name: "MariaDB | Prepare databases |"
+  include_tasks:
+    file: "mariadb_databases.yaml"
+  loop: "{{ mariadb_databases }}"
+  loop_control:
+    loop_var: _database
+
