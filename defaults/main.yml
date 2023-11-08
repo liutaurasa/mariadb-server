@@ -1,5 +1,6 @@
 ---
 packages:
+  _9: ['mariadb', 'mariadb-server', 'python3-PyMySQL']
   _8: ['mariadb', 'mariadb-server', 'python3-PyMySQL']
   _7: ['mariadb', 'mariadb-server', 'python2-PyMySQL']
 
