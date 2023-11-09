@@ -37,7 +37,8 @@ thread_cache_size=20
 # tmpdir=/var/tmp/mysql
 tmp_table_size=512M
 user=mysql
-wait_timeout = 3600
+lower_case_table_names = {{ mariadb_mysqld_lower_case_table_names | default('0') | int }}
+wait_timeout = {{ mariadb_mysqld_wait_timeout | default('3600') }}
 
 [mysqld_safe]
 log-error=/var/log/mysqld.log

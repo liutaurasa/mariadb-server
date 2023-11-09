@@ -11,4 +11,4 @@ mariadb:
 
 mariadb_databases: []
 
-mariadb_root_password: "{{ lookup('password', 'host_vars/' + inventory_hostname + '_mariadb_root_password') }}"
+mariadb_root_password: "{{ lookup('password', 'vaults/credentials/' + inventory_hostname + '/mariadb/root.pass') }}"

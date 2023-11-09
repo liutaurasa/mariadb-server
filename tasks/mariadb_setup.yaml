@@ -1,7 +1,7 @@
 ---
 - name: "MariaDB | Configuration file |"
-  copy:
-    src: files/my.cnf
+  template:
+    src: my.cnf.j2
     dest: /etc/my.cnf
     owner: root
     group: root
@@ -29,6 +29,6 @@
 
 - name: "MariaDB | Enable and start service |"
   service:
-    name: "{{ mariadb[ansible_os_family]['service'] }}"
+    name: "{{ mariadb_service | default(mariadb[ansible_os_family]['service']) }}"
     state: started
     enabled: yes

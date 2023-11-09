@@ -1,5 +1,5 @@
 ---
 - name: "Restart mariadb"
   service:
-    name: "{{ mariadb[ansible_os_family]['service'] }}"
+    name: "{{ mariadb_service | default(mariadb[ansible_os_family]['service']) }}"
     state: restarted
