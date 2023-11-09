@@ -4,6 +4,8 @@
     name: root
     host: localhost
     password: '{{ mariadb_root_password }}'
+    login_user: root
+    login_unix_socket: /var/lib/mysql/mysql.sock
   ignore_errors: "{{ ansible_check_mode }}"
   register: root_password_set
 
